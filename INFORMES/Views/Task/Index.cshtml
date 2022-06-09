@@ -1,0 +1,73 @@
+﻿@using System.Globalization
+@model IEnumerable<VMTask>
+
+@{
+    ViewData["Title"] = "Task";
+    DateTime date = DateTime.Today;
+    string month = date.ToString("MMMM",CultureInfo.CreateSpecificCulture("en-US"));
+
+}
+
+<div class="container">
+   <div id="context">
+       <a asp-action="CreateTask" class="btn btn-primary mb-3">Create new Task</a>
+       <a asp-action="PrintExel" class="btn btn-success mb-3">Print Exel Report</a>
+   </div>
+</div>
+
+<h3>Task List @month</h3>
+
+@if (Model.Count() == 0)
+{
+    <center>
+          <br><br><br><br><br><br><br>
+         <h1>You dont have task</h1>
+    </center>
+}
+
+<div class="container">
+
+<div class="accordion" id="accordionExample">
+
+        @{
+           
+            string id="heading";
+            string databstarget = "#collapse";
+            string ariacontrols = "collapse";
+
+        }
+
+ @foreach (var item in Model)
+        {
+            id = id + item.IdTask;
+            databstarget = databstarget + item.IdTask;
+            ariacontrols = ariacontrols + item.IdTask;
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="@id">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@databstarget" aria-expanded="false" aria-controls="@ariacontrols">
+          
+        <span class="me-3">
+              <span><strong>@item.IdTask</strong></span>
+              <span class="text-success">@item.StartDate.ToShortDateString()</span>
+        </span>
+
+      </button>
+    </h2>
+    <div id="@ariacontrols" class="accordion-collapse collapse" aria-labelledby="@id " data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <strong>@item.TitleTask</strong>
+         <a asp-action="EditTask" asp-route-id="@item.IdTask" class="btn btn-success"><i class="bi-pencil-fill"></i></a>
+          <a asp-action="DeleteTask" asp-route-id="@item.IdTask" class="btn btn-danger"><i class="bi-trash-fill"></i></a>
+      </div>
+    </div>
+  </div>
+
+  }
+
+
+</div>
+
+</div>
+
+
